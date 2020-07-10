@@ -19,7 +19,7 @@ repositories {
 	mavenCentral()
 }
 
-ext['tomcat.version'] = '8.5.38'
+//ext['tomcat.version'] = '8.5.38'
 
 bootWar.enabled = false
 war.enabled = true
