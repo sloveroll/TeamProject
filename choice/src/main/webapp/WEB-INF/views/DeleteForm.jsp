@@ -8,11 +8,10 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>choicemain.jsp</title>
+<title>DeleteForm.jsp</title>
 </head>
 <body>
-
-안녕하세요 choicemain.jsp 페이지입니다. 
+<h1>DeleteForm.jsp</h1>
 
 </body>
 </html>
