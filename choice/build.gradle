@@ -1,0 +1,53 @@
+plugins {
+	id 'org.springframework.boot' version '2.3.1.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'java'
+	id 'war'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+//ext['tomcat.version'] = '8.5.38'
+
+bootWar.enabled = false
+war.enabled = true
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.3'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+	testImplementation('org.springframework.boot:spring-boot-starter-test') {
+		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	}
+	//jsp 세팅 
+	implementation 'javax.servlet:jstl'
+implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
+	//sql log선언
+	//implementation 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4:1.16'
+
+    implementation 'org.webjars:jquery:3.4.1'//제이쿼리
+    implementation 'org.webjars:bootstrap:4.3.1'//부트스트랩
+    
+     //jar파일 직접 링크할 때 추가하는 의존성.
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+test {
+	useJUnitPlatform()
+}

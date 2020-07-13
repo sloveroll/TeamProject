@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: choice
+Bundle-SymbolicName: choice
+Bundle-Version: 1.0.0.qualifier
+Export-Package: com.example.demo,
+ com.study.springboot,
+ com.study.springboot.dao,
+ com.study.springboot.dto,
+ com.study.springboot.service,
+ mybatis.mapper
