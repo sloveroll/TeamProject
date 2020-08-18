@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.springboot.dao.ICartDao">
+ 
+<!-- 장바구니 리스트를 출력 -->
+<select id="cartListDao" resultType="com.study.springboot.dto.cartDto"> 
+<!-- select * from cartlist cr inner join item it on cr.cr_item_idx = it.item_idx where cR_user_id =#{user_id} -->
+select * from cartlist cr inner join item it on cr.cr_item_idx = it.item_idx where cr_user_id =#{user_id}
+</select> 
+<!-- 유저 장바구니 갯수 -->
+<select id="cartIdxCountDao" resultType="int"> 
+ select count(*) from cartlist where cr_user_id = #{user_id}
+</select> 
+<!-- 중복되는 상품이 있는지 -->
+<select id="cartCountDao" resultType="int"> 
+ select count(*) from cartlist where cr_user_id = #{user_id} AND CR_ITEM_IDX=#{cr_item_idx}
+</select> 
+
+<!-- 카트수정 -->
+<update id="cartUpdateDao"> 
+update cartList set cart_item_count = cart_item_count + #{cart_item_count} 
+                   WHERE cr_user_id = #{user_id} AND cr_item_idx = #{cr_item_idx}        
+</update>
+<!-- 카트추가 -->
+<insert id="cartInsertDao">
+INSERT INTO CARTLIST (CR_USER_ID, CR_ITEM_IDX, CART_IDX, CART_ITEM_COUNT, CART_ITEM_SELLPRICE) VALUES 
+						(#{user_id}, #{cr_item_idx}, SEQ_CART_IDX.nextval, #{cart_item_count}, #{cart_item_sellprice})
+</insert>
+
+<!-- 해당 유저 장바구니 비움 -->
+<delete id="cartDeleteDao2">
+   delete from cartlist where cr_user_id = #{user_id} 
+</delete>
+<!-- 카트에서 삭제 --> 
+<delete id="cartDeleteDao">
+   delete from cartlist where cr_user_id = #{user_id} AND cart_idx = #{cart_idx} 
+</delete>
+<!-- 상품구매시 삭제 -->
+<delete id="cartBuyDeleteDao">
+   delete from cartlist where cr_user_id = #{user_id} AND cart_idx = #{cart_idx1} or cart_idx = #{cart_idx2} or cart_idx = #{cart_idx3}
+</delete>
+
+<select id="cartBuyDao" resultType="com.study.springboot.dto.cartDto"> 
+<!-- select * from cartlist where cr_user_id = #{user_id} AND cart_idx = #{cart_idx1} OR cart_idx=#{cart_idx2} OR
+cart_idx= #{cart_idx3} -->
+<!-- 장바구니에서 구매 클릭시 -->
+select * from cartlist cr inner join item it on cr.CR_item_idx = it.item_idx where 
+cr_user_id = #{user_id} AND cr.cart_idx= #{cart_idx1} OR cr.cart_idx=#{cart_idx2} or cr.cart_idx=#{cart_idx3} 
+</select> 
+</mapper>
+
+ 
+
