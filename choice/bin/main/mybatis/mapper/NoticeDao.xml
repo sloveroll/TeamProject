@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.study.springboot.dao.INoticeDao">
+	<!--오라클 버전확인 : SELECT * FROM PRODUCT_COMPONENT_VERSION -->
+
+	<!-- 오라클 데이터 타입★:가변길이 =실제입력된 데이터 길이에 따라 크기가 변하는것. -->
+	<!-- 문자데이터 타입 :CHAR=고정길이문자, 최대2000바이트 -->
+	<!-- 문자데이터 타입 :VARCHAR2=가변길이문자, 최대4000바이트 -->
+	<!-- 문자데이터 타입 :LONG=최대 2GB 크기 가변길이 문자형 -->
+	<!-- 문자데이터 타입 :CLOB=대용량 텍스트 데이터 타입 (최대 4G) -->
+	<!-- 숫자형:NUMBER(P,S) :가변숫자. 최대22바이트 P는 소수점포함전체자릿수, S는 소숫점 자리 의미 -->
+	<!-- 날짜데이터 타입: DATE : 연원일시분초 TIMESTAMP: 연월일시분초 밀리초까지 입력가능 -->
+	<!-- LOB데이터 타입: CLOB: 문자대용량 객체고정길이와 가변길이 문자집합지원, BLOB:이진형 대용량 객체 -->
+	<!-- LOB Large OBject : 대용량 데이터 저장가능 데이터타입 , 그래픽,이미지, 사운드, 비정형데이터 저장시 LOB타입사용, 
+		// 그래픽, 이미지, 동영상 데이터 는 BLOB 주로사용 -->
+
+
+
+	<!-- 오라클 sql문 : 작성규칙 : 대소문자구분 안함. SELECT결과 열머리글은 기본적으로 대문자로 표시 -->
+	<!-- SELECT 컬럼1,컬럼2,컬럼3, ....FROM 테이블명; -->
+	<!-- SELECT ename, sal FROM emp; -->
+	<!-- SELECT ENAME,sal FROM emp; 컬럼은 대소문자구분안함 ,컬럼중복 상관없음 ,컬럼이용연산가능 2*sal(봉급) -->
+	<!-- 리터럴: 특정문자,숫자,Date타입등 상수출력시 사용; DATE타입이나 문자열은 작은따옴표 ('')로 둘러싸야함 -->
+
+
+	<!-- SELECT : 데이터 조회 위해 사용 -->
+	<!-- * : 데이블 정의된 모든 필드(컬럼) 조회 -->
+	<!-- FROM 테이블명 : 선택 테이블 명 -->
+	<!-- IN, ANY,SOME , OR 다양한 함수처리 가능 , 속도차이없음 , 기능같음===== 키 100,200,300 선수들 
+		이름 ,키,팀ID조회 -->
+	<!-- SELECT play_name 이름 , height 키, team_id 팀 아이디 FROM PLAYER_T WHERE height 
+		IN(100,200,300) -->
+	<!-- SELECT play_name 이름 , height 키, team_id 팀 아이디 FROM PLAYER_T WHERE height=ANY(100,200,300) -->
+	<!-- SELECT play_name 이름 , height 키, team_id 팀 아이디 FROM PLAYER_T WHERE height=SOME 
+		IN(100,200,300) -->
+	<!-- SELECT play_name 이름 , height 키, team_id 팀 아이디 FROM PLAYER_T WHERE height 
+		height=100 OR height=200 OR height=300; -->
+	<!-- BETWEEN A AND B ==키가 100보다 크거나 같고 , 200보다 작거나 같은 범위내 해당선수 이름 , 키 조회하기 -->
+	<!-- SELECT play_name 이름 , height 키 FROM PLAYER_T WHERE height>= 100 AND 
+		height <=200; -->
+	<!-- SELECT play_name 이름 , height 키 FROM PLAYER_T WHERE height BETWEEN 100 
+		AND 200; -->
+	<!-- 문자는 가나다/ ABC순으로 검색 유의 -->
+	<!-- SELECT play_name,height FROM PLAYER_T WHERE play_name BETWEEN '가길동' 
+		AND '박길동'; -->
+
+	<!-- LIKE 연산자 =SELECT play_name,e-player_name FROM PLAYER_T WHERE play_name 
+		like'가_'; -->
+	<!-- 이름이 2번째 글자가 '수'인 선수들 이름 ,영문이름 조회 -->
+	<!--SELECT play_name,e-player_name FROM PLAYER_T WHERE play_name LIKE'_수%'; -->
+	<!-- 이름이 2글자인 선수들만 이름 ,영문이름 조회 -->
+	<!--SELECT play_name,e-player_name FROM PLAYER_T WHERE play_name LIKE'__'; -->
+	<!-- 영문이름에 'T'문자 포함된 이름, 영문이름 조회하기 -->
+	<!--SELECT play_name,e-player_name FROM PLAYER_T WHERE play_name LIKE'%T%'; -->
+	<!-- 영문이름에 'T'문자 포함아니된 선수들 이름, 영문이름 조회하기 -->
+	<!--SELECT play_name,e-player_name FROM PLAYER_T WHERE play_name NOT LIKE'%T%'; -->
+	<!-- 영문이름에 '%'문자 포함된 이름, 영문이름 조회하기 -->
+	<!--SELECT play_name,e-player_name FROM PLAYER_T WHERE play_name LIKE'%!%%' 
+		ESCAPE'!'; -->
+
+	<!-- NOT연산자 -->
+	<!--SELECT ename,sal FROM emp WHERE NOT sal > 2000; -->
+	<!--SELECT ename,sal FROM emp WHERE NOT > 2000; 에러발생 =,>,< 바로앞에 NOT사용불가 -->
+
+	<!--SELECT ename,sal FROM emp WHERE NOT ename LIKE 'A%'; -->
+
+	<!--LIKE , BETWEEN, IN 연산자는 바로앞에도 NOT 사용가능 -->
+	<!--SELECT ename,sal FROM emp WHERE ename NOT LIKE 'A%'; -->
+	<!-- 문자열개수 찾는 연산 emp사원중 ename에 A문자가 2번이상들어있는 사원이름 조회하기 -->
+	<!-- SELECT ename FROM emp WHERE ename like '%A%A%'; -->
+	<!-- 문자열개수 찾는 연산 emp사원중 ename에 A문자가 딱1번만 나오는 사원이름 조회하기 -->
+	<!-- SELECT ename FROM emp WHERE ename like '%A%' AND ename NOT LIKE '%A%A%'; -->
+
+
+	<!-- 글목록 -->
+	<select id="NoticelistDao"
+		resultType="com.study.springboot.dto.NoticeDto">
+		select * from notice order by notice_idx desc
+		<!-- 데이터 오름차순 :asc 내림차순; desc 기본값은 asc(오름차순), 문자는 알파벳순으로 -->
+		<!-- 오름: 작은값->큰값 1 2 3 4 5 -->
+		<!-- 내림: 큰값 -> 작은값 5 4 3 2 1 -->
+	</select>
+
+	<!-- 글게시판 번호 보기 -->
+	<select id="NoticeviewDao"
+		resultType="com.study.springboot.dto.NoticeDto">
+		<!-- WHERE: 행제한조건 : 검색결과에 대한 제한둘때 WHERE조건 지정 -->
+		<!-- FROM 절다음에 WHERE절 사용 -->
+		<!-- 문자열과 날짜값은 작은따옴표로 묶어 표시 -->
+		<!-- WHERE절 생략가능, 생략경우 모든행검색됨. -->
+		<!--형식: SELECT 컬러명1,컬럼명2 FROM 테이블명 WHERE 조건식 -->
+		select * from notice where notice_idx = #{param1}
+	</select>
+
+	<!-- 공지사항조회수 update로 집어넣고 view쪽으로 들어갈때마다 idx같다받으면서 hit가 +1됨. -->
+	<update id="NoticehitDao">
+		<!-- UPDATE 테이블명 SET 컬럼1='입력할값', 컬럼2='입력할값', 컬럼3='입력할값' WHERE 조건; -->
+		update notice set notice_hit =notice_hit+1 where notice_idx =
+		#{param1}
+	</update>
+
+	<!-- 공지사항 글쓰기 -->
+	<insert id="NoticewriteDao">
+		<!-- 시퀀스: Sequence : 자동순차적증가 순번 반환 데이터베이스객체. pk값 중복값방지위해사용. -->
+		<!-- 시퀀스 생성 :CREATE SEQUENCE [시퀀스명] -->
+		<!-- 시퀀스 수정 :ALTER SEQUENCE [시퀀스명] -->
+		<!-- 시퀀스 삭제 :DROP SEQUENCE [시퀀스명] -->
+		<!-- INSERT INTO 테이블명 ( 컬럼1,컬럼2,컬럼3,...)VALUES(데이터1,데이터2,데이터3,...) -->
+		insert into notice (notice_idx, notice_title, notice_content,
+		notice_date, notice_hit, notice_writer)
+		values (notice_seq.nextval, #{notice_title}, #{notice_content}, sysdate, 0,
+		#{notice_writer})
+	</insert>
+
+	<!-- 공지사항 글수정 -->
+	<update id="NoticemodifyDao">
+		<!-- UPDATE 테이블명 SET 컬럼1='입력할값', 컬럼2='입력할값', 컬럼3='입력할값' WHERE 조건; -->
+		update notice set notice_writer = #{notice_writer}, notice_title =
+		#{notice_title},
+		notice_content = #{notice_content}, notice_date = sysdate WHERE notice_idx =
+		#{notice_idx}
+	</update>
+
+	<!-- 공지사항 글삭제 -->
+	<delete id="NoticedeleteDao">
+		<!--DELETE FROM 테이블명 WHERE 조건; -->
+		delete notice where notice_idx = #{param1}
+	</delete>
+
+	<!-- 게시물 총 갯수 -->
+	<select id="countBoardDao" resultType="int">
+		<!-- 전체행갯수 가져오기 SELECT COUNT(*) FROM 테이블; -->
+		<!-- 컬럼데이터갯수 가져오기 SELECT COUNT(컬럼) FROM 테이블; -->
+		SELECT COUNT(*) FROM notice
+	</select>
+
+	<!-- 공지사항 페이징 처리 후 게시글 조회 -->
+	<select id="NoticePagingDao"
+		resultType="com.study.springboot.dto.NoticeDto">
+
+		<!-- 오라클 ROWNUM키워드 -->
+		<!-- 조회된순서대로 순번 매기기 : SELECT ROWNUM, A.* FROM emp A -->
+		<!-- ORDER BY사용시 순번 뒤섞이므로 정렬된 서브쿼리 결과에 ROWNUM매겨야한다. -->
+		<!-- SELECT ROWNUM , x.* FROM ( SELECT a.* FROM emp a OREDER By a.ename) 
+			x -->
+		SELECT *
+		FROM (
+		<!-- 조회된 순서대로 순번을 먹임 -->
+		SELECT ROWNUM RN, A.*
+		FROM (
+		SELECT *
+		FROM notice
+		ORDER BY notice_idx DESC
+		) A
+		)
+		WHERE RN BETWEEN #{start} AND #{end}
+	</select>
+
+
+</mapper>
+
+ 
+
